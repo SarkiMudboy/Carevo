@@ -1,0 +1,10 @@
+// This configuration extends the Node.js 22 TypeScript configuration and sets up the output directory and root directory.
+{
+  "extends": "@tsconfig/node22/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./"
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["dist"]
+}
