@@ -3,27 +3,24 @@ const RECIPIENT_WAID = process.env.RECIPIENT_WAID;
 const PHONE_NUMBER_ID = process.env.PHONE_NUMBER_ID;
 const VERSION = process.env.VERSION || 'v22.0';
 
-
 export default async function sendWhatsAppMessage(message: string) {
-    const url = `https://graph.facebook.com/${VERSION}/${PHONE_NUMBER_ID}/messages`
-    console.log(url)
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${ACCESS_TOKEN}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            messaging_product: 'whatsapp',
-            to: RECIPIENT_WAID,
-            recepient_type: 'individual',
-            type: 'text',
-            text: { preview_url: false, body: message }
-        })
-    })
-    console.log(`Response status: ${response.status}`);
-    console.log(`Response status text: ${response.statusText}`);
-    return response.json();
+  const url = `https://graph.facebook.com/${VERSION}/${PHONE_NUMBER_ID}/messages`;
+  console.log(url);
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${ACCESS_TOKEN}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      messaging_product: 'whatsapp',
+      to: RECIPIENT_WAID,
+      recepient_type: 'individual',
+      type: 'text',
+      text: { preview_url: false, body: message },
+    }),
+  });
+  console.log(`Response status: ${response.status}`);
+  console.log(`Response status text: ${response.statusText}`);
+  return response.json();
 }
-
-
