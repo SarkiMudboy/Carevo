@@ -13,13 +13,15 @@ webhookRouter.get('', (req, res) => {
     if (mode === 'subscribe' && verifyToken === process.env.VERIFY_TOKEN) {
       console.log('Webhook verified');
       // echo back the challenge token
-      res.status(200).send(req.query['hub.challenge']);
+      return res.status(200).send(req.query['hub.challenge']);
     } else {
       console.error('Webhook verification failed:', mode, verifyToken);
-      res.status(403).send('Forbidden');
+      return res.status(403).send('Forbidden');
     }
   } else {
-    res.status(400).send('Bad Request: Missing parameters or invalid token');
+    return res
+      .status(400)
+      .send('Bad Request: Missing parameters or invalid token');
   }
 });
 
@@ -36,12 +38,14 @@ webhookRouter.post(
     // Check if its a whatsapp event status message i.e. read, delivered, sent e.t.c. we create a type for this to cast
     if (changes && status) {
       console.log('Status recieved: ', status);
-      res.status(200).send({ status: status });
+      return res.status(200).send({ status: status });
     }
 
     if (!changes) {
       console.error('No changes found');
-      res.status(400).send('Bad Request: No changes found in the webhook data');
+      return res
+        .status(400)
+        .send('Bad Request: No changes found in the webhook data');
     }
 
     console.log('EVENT_RECEIVED');
@@ -51,7 +55,8 @@ webhookRouter.post(
       // Handle messages in the chat handlers
       next();
     } else {
-      res.status(400).send('Bad Request: Invalid webhook data');
+      console.log('THIS IS NOT A MSG');
+      return res.status(400).send('Bad Request: Invalid webhook data');
     }
   },
   chatRouter

@@ -1,3 +1,5 @@
+// import generateResponse from '#services/inference/mistral.js';
+import generateResponse from '#services/inference/openrouter.js';
 import { parseIncomingWhatAppMessageData } from './utils.js';
 
 const ACCESS_TOKEN = process.env.ACCESS_TOKEN;
@@ -23,14 +25,19 @@ async function sendMessage(message: string) {
     }),
   });
   console.log(`Response status: ${response.status}`);
-  //   console.log(`Response status text: ${response.statusText}`);
+  console.log(`Response status text: ${response.statusText}`);
 
   return response.json();
 }
 
 export const processMessage = async (data: any) => {
   const messageData = parseIncomingWhatAppMessageData(data);
+
   if (messageData?.text) {
-    const response = await sendMessage(messageData.text);
+    const responseText = await generateResponse(messageData.text);
+
+    const response = await sendMessage(
+      responseText || 'Sorry, I did not understand that.'
+    );
   }
 };

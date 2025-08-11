@@ -9,14 +9,18 @@ type messageData = {
 
 export const isValidIncomingWhatsAppMessageData = (data: any): boolean => {
   // Validates that webhook event data has a valid "message" structure
-  const eventType =
+  const changes =
     data &&
     data.entry &&
     data.entry[0] &&
     data.entry[0].changes &&
-    data.entry[0].changes[0].field;
+    data.entry[0].changes[0];
 
-  if (eventType === 'messages' && data.entry[0].changes[0].value.messages[0]) {
+  const eventType = changes.field;
+  const messages =
+    changes.value && changes.value.messages && changes.value.messages[0];
+
+  if (eventType === 'messages' && messages) {
     return true;
   }
   return false;
@@ -29,16 +33,19 @@ export const parseIncomingWhatAppMessageData = (
   // args -> data: payload
   //returns -> message (false if the structure does not conform with that of an incoming whatsapp message)
 
-  const eventType =
+  const changes =
     data &&
     data.entry &&
     data.entry[0] &&
     data.entry[0].changes &&
-    data.entry[0].changes[0].field;
+    data.entry[0].changes[0];
+
+  const eventType = changes ? changes.field : null;
+  const messages = changes ? changes.value.messages : null;
 
   if (eventType === 'messages') {
-    const message = data.entry[0].changes[0].value.messages[0]; // fails here
-    if (message) {
+    if (messages && messages.length > 0) {
+      const message = messages[0];
       const messageData = {
         id: message.id,
         from: message.from,
