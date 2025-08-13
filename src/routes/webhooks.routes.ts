@@ -49,7 +49,6 @@ webhookRouter.post(
     }
 
     console.log('EVENT_RECEIVED');
-    console.log('Changes:', changes);
 
     if (isValidIncomingWhatsAppMessageData(body)) {
       // Handle messages in the chat handlers
